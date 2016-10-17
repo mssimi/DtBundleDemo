@@ -66,6 +66,7 @@ class PostDatatable extends AbstractDatatableView
             'actions' => array(
                 array(
                     'route' => $this->router->generate('post_new'),
+                    'route_parameters' => array('visible' => 1),
                     'label' => $this->translator->trans('datatables.actions.new'),
                     'icon' => 'glyphicon glyphicon-plus',
                     'attributes' => array(
@@ -110,6 +111,23 @@ class PostDatatable extends AbstractDatatableView
             'url' => $this->router->generate('post_results'),
             'type' => 'GET',
             'pipeline' => 5
+        ));
+
+        $this->tabs->set(array(
+            'actions' => array(
+                array(
+                    'route' => $this->router->generate('post_results'),
+                    'label' => 'All',
+                ),
+                array(
+                    'route' => $this->router->generate('post_results', array('visible' => 1)),
+                    'label' => 'Visible',
+                ),
+                array(
+                    'route' => $this->router->generate('post_results', array('visible' => 0)),
+                    'label' => 'Invisible',
+                )
+            )
         ));
 
         $this->options->set(array(

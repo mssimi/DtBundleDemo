@@ -81,19 +81,29 @@ class PostController extends Controller
     }
 
     /**
-     * @Route("/results", name="post_results")
+     * @Route("/results/{visible}", name="post_results", defaults={"visible" = null})
      * @Security("has_role('ROLE_USER')")
      *
+     * @param null $visible
      * @return Response
      */
-    public function indexResultsAction()
+    public function indexResultsAction($visible = null)
     {
         $datatable = $this->get('app.datatable.post');
         $datatable->buildDatatable();
 
         $query = $this->get('sg_datatables.query')->getQueryFrom($datatable);
+        $query->buildQuery();
 
-        return $query->getResponse();
+        if ($visible !== null){
+            $qb = $query->getQuery();
+            $qb->andWhere("post.visible = :visible");
+            $qb->setParameter('visible', $visible);
+            $query->setQuery($qb);
+        }
+
+        return $query->getResponse(false);
+
     }
 
     /**
